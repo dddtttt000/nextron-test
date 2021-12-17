@@ -1,14 +1,15 @@
-import React from 'react';
-import Head from 'next/head';
-import { Theme, makeStyles, createStyles } from '@material-ui/core/styles';
-import Button from '@material-ui/core/Button';
-import Dialog from '@material-ui/core/Dialog';
-import DialogTitle from '@material-ui/core/DialogTitle';
-import DialogContent from '@material-ui/core/DialogContent';
-import DialogContentText from '@material-ui/core/DialogContentText';
-import DialogActions from '@material-ui/core/DialogActions';
-import Typography from '@material-ui/core/Typography';
-import Link from '../components/Link';
+import React from 'react'
+import Head from 'next/head'
+import clsx from 'clsx'
+import { Theme, makeStyles, createStyles } from '@material-ui/core/styles'
+import { Button, TextField } from '@material-ui/core'
+import Dialog from '@material-ui/core/Dialog'
+import DialogTitle from '@material-ui/core/DialogTitle'
+import DialogContent from '@material-ui/core/DialogContent'
+import DialogContentText from '@material-ui/core/DialogContentText'
+import DialogActions from '@material-ui/core/DialogActions'
+import Typography from '@material-ui/core/Typography'
+import Link from '../components/Link'
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -16,29 +17,73 @@ const useStyles = makeStyles((theme: Theme) =>
       textAlign: 'center',
       paddingTop: theme.spacing(4),
     },
-  })
-);
+    display: {
+      display: 'block',
+    },
+    margin: {
+      margin: theme.spacing(1),
+      marginLeft: theme.spacing(10),
+    },
+    textField: {
+      width: '25ch',
+    },
+  }),
+)
+
+interface State {
+  email: string
+  password: string
+}
 
 function Home() {
-  const classes = useStyles({});
-  const [open, setOpen] = React.useState(false);
-  const handleClose = () => setOpen(false);
-  const handleClick = () => setOpen(true);
+  const classes = useStyles({})
+  const [open, setOpen] = React.useState(false)
+  const [values, setValues] = React.useState<State>({
+    email: '',
+    password: '',
+  })
+
+  //console.log(values)
+  const handleClose = () => setOpen(false)
+  const handleClick = () => setOpen(true)
+
+  const handleChange = (prop: keyof State) => (
+    event: React.ChangeEvent<HTMLInputElement>,
+  ) => {
+    setValues({ ...values, [prop]: event.target.value })
+  }
 
   return (
     <React.Fragment>
       <Head>
-        <title>Home - Nextron (with-typescript-material-ui)</title>
+        <title>Home</title>
       </Head>
       <div className={classes.root}>
         <Dialog open={open} onClose={handleClose}>
-          <DialogTitle>Super Secret Password</DialogTitle>
+          <DialogTitle className={classes.root}>로그인</DialogTitle>
           <DialogContent>
-            <DialogContentText>1-2-3-4-5</DialogContentText>
+            <DialogContentText className={classes.display}>
+              {/* <form
+                className={clsx(classes.margin, classes.textField)}
+                noValidate
+                autoComplete="off"
+              >
+                <TextField
+                  id="standard-basic"
+                  label="E-mail"
+                  onChange={handleChange('email')}
+                />
+                <TextField
+                  id="standard-basic"
+                  label="Password"
+                  onChange={handleChange('password')}
+                />
+              </form> */}
+            </DialogContentText>
           </DialogContent>
           <DialogActions>
             <Button color="primary" onClick={handleClose}>
-              OK
+              확인
             </Button>
           </DialogActions>
         </Dialog>
@@ -52,12 +97,15 @@ function Home() {
         <Typography gutterBottom>
           <Link href="/next">Go to the next page</Link>
         </Typography>
+        <Typography gutterBottom>
+          <Link href="/signin">회원가입</Link>
+        </Typography>
         <Button variant="contained" color="secondary" onClick={handleClick}>
-          Super Secret Password
+          로그인하고 시작하기
         </Button>
       </div>
     </React.Fragment>
-  );
-};
+  )
+}
 
-export default Home;
+export default Home
